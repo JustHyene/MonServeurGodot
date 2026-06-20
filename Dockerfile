@@ -1,16 +1,13 @@
-FROM node:20-slim
+FROM chickenbellyfinn/godot:4.3
 
-# Installation des dépendances graphiques de base requises par Godot 4
-RUN apt-get update && apt-get install -y \
-    libxrender1 libxext6 libx11-6 libxcursor1 libxi6 libxrandr2 libgl1 \
-    && rm -rf /var/lib/apt/lists/*
-
-# Téléchargement et installation automatique et propre de Godot 4.3 stable
-RUN npm install -g godot-manager && godot-manager install 4.3-stable --global
-
-# Copie de ton fichier d'arène
-COPY ServeurJeu.pck /app/ServeurJeu.pck
+# Crée le dossier de l'application
 WORKDIR /app
 
+# Copie ton fichier d'arène compilé
+COPY ServeurJeu.pck /app/ServeurJeu.pck
+
+# Ouvre le port réseau
 EXPOSE 1234
+
+# Lance Godot en mode sans écran avec ton arène
 CMD ["godot", "--headless", "--main-pack", "ServeurJeu.pck"]
