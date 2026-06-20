@@ -1,25 +1,14 @@
-FROM ubuntu:focal
+FROM node:20-slim
 
-# Installation des dépendances Linux obligatoires pour Godot 4
+# Installation des dépendances graphiques de base requises par Godot 4
 RUN apt-get update && apt-get install -y \
-    wget \
-    unzip \
-    libxrender1 \
-    libxext6 \
-    libx11-6 \
-    libxcursor1 \
-    libxi6 \
-    libxrandr2 \
-    libgl1-mesa-glx \
+    libxrender1 libxext6 libx11-6 libxcursor1 libxi6 libxrandr2 libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Téléchargement et installation de Godot 4.3 Serveur Officiel
-RUN wget https://github.com \
-    && unzip Godot_v4.3-stable_linux.x86_64.zip \
-    && mv Godot_v4.3-stable_linux.x86_64 /usr/local/bin/godot \
-    && rm Godot_v4.3-stable_linux.x86_64.zip
+# Téléchargement et installation automatique et propre de Godot 4.3 stable
+RUN npm install -g godot-manager && godot-manager install 4.3-stable --global
 
-# Copie de ton arène
+# Copie de ton fichier d'arène
 COPY ServeurJeu.pck /app/ServeurJeu.pck
 WORKDIR /app
 
